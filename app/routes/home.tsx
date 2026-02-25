@@ -5,6 +5,7 @@ import Button from "components/ui/Button";
 import { useNavigate } from "react-router";
 import Upload from "components/Upload";
 import { useRef, useState } from "react";
+import { createProject } from "lib/puter.action";
 
 const projects = [
   {
@@ -41,24 +42,24 @@ export default function Home() {
         renderedImage: undefined,
         timestamp: Date.now()
       }
-      navigate(`/visualizer/${newId}`)
+      // navigate(`/visualizer/${newId}`)
 
-      // const saved = await createProject({ item: newItem, visibility: 'private' });
+      const saved = await createProject({ item: newItem, visibility: 'private' });
 
-      // if (!saved) {
-      //   console.error("Failed to create project");
-      //   return false;
-      // }
+      if (!saved) {
+        console.error("Failed to create project");
+        return false;
+      }
 
-      // setProjects((prev) => [saved, ...prev]);
+      setProjects((prev) => [saved, ...prev]);
 
-      // navigate(`/visualizer/${newId}`, {
-      //   state: {
-      //     initialImage: saved.sourceImage,
-      //     initialRendered: saved.renderedImage || null,
-      //     name
-      //   }
-      // });
+      navigate(`/visualizer/${newId}`, {
+        state: {
+          initialImage: saved.sourceImage,
+          initialRendered: saved.renderedImage || null,
+          name
+        }
+      });
 
       return true;
     } finally {
