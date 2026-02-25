@@ -1,6 +1,6 @@
 
 import { Box } from "lucide-react";
-import { useOutletContext } from "react-router";
+import { Link, useOutletContext } from "react-router";
 import Button from "./ui/Button";
 
 const Navbar = () => {
@@ -29,19 +29,19 @@ const Navbar = () => {
         <header className="navbar">
             <nav className="inner">
                 <div className="left">
-                    <div className="brand">
+                    <Link to="/" className="brand">
                         <Box className="logo" />
 
                         <span className="name">
                             Roomify
                         </span>
-                    </div>
+                    </Link>
 
                     <ul className="links">
-                        <a href="#">Product</a>
-                        <a href="#">Pricing</a>
-                        <a href="#">Community</a>
-                        <a href="#">Enterprise</a>
+                        <Link to="/product">Product</Link>
+                        <Link to="/pricing">Pricing</Link>
+                        <Link to="/community">Community</Link>
+                        <Link to="/enterprise">Enterprise</Link>
                     </ul>
                 </div>
 
