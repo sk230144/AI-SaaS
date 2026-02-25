@@ -16,10 +16,10 @@ export const getCurrentUser = async () => {
 }
 
 export const createProject = async ({ item, visibility = "private" }: CreateProjectParams): Promise<DesignItem | null | undefined> => {
-    // if (!PUTER_WORKER_URL) {
-    //     console.warn('Missing VITE_PUTER_WORKER_URL; skip history fetch;');
-    //     return null;
-    // }
+    if (!PUTER_WORKER_URL) {
+        console.warn('Missing VITE_PUTER_WORKER_URL; skip history fetch;');
+        return null;
+    }
     const projectId = item.id;
 
     const hosting = await getOrCreateHostingConfig();
@@ -61,23 +61,22 @@ export const createProject = async ({ item, visibility = "private" }: CreateProj
 
 
     try {
-        return payload
-        // const response = await puter.workers.exec(`${PUTER_WORKER_URL}/api/projects/save`, {
-        //     method: 'POST',
-        //     body: JSON.stringify({
-        //         project: payload,
-        //         visibility
-        //     })
-        // });
+        const response = await puter.workers.exec(`${PUTER_WORKER_URL}/api/projects/save`, {
+            method: 'POST',
+            body: JSON.stringify({
+                project: payload,
+                visibility
+            })
+        });
 
-        // if (!response.ok) {
-        //     console.error('failed to save the project', await response.text());
-        //     return null;
-        // }
+        if (!response.ok) {
+            console.error('failed to save the project', await response.text());
+            return null;
+        }
 
-        // const data = (await response.json()) as { project?: DesignItem | null }
+        const data = (await response.json()) as { project?: DesignItem | null }
 
-        // return data?.project ?? null;
+        return data?.project ?? null;
     } catch (e) {
         console.log('Failed to save project', e)
         return null;
