@@ -7,4 +7,5 @@ export default [
     route("pricing", './routes/pricing.tsx'),
     route("community", './routes/community.tsx'),
     route("enterprise", './routes/enterprise.tsx'),
+    route("demo", './routes/demo.tsx'),
 ] satisfies RouteConfig;

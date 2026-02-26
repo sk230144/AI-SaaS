@@ -76,7 +76,7 @@ export default function Home() {
 
     fetchProjects();
   }, []);
-  
+
   return (
     <div className="home">
       <Navbar />
@@ -101,7 +101,7 @@ export default function Home() {
             Start Building <ArrowRight className="icon" />
           </a>
 
-          <Button variant="outline" size="lg" className="demo">
+          <Button variant="outline" size="lg" className="demo" onClick={() => navigate('/demo')}>
             Watch Demo
           </Button>
         </div>

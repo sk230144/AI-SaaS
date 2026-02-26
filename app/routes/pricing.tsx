@@ -1,7 +1,6 @@
 import Navbar from "components/Navbar";
-import { ArrowRight, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronUp, CreditCard, X, Lock } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
 
 const plans = [
     {
@@ -80,6 +79,13 @@ const faqs = [
 
 export default function Pricing() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const [showPayment, setShowPayment] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState<string>("");
+
+    const handlePlanClick = (planName: string) => {
+        setSelectedPlan(planName);
+        setShowPayment(true);
+    };
 
     return (
         <div className="pricing-page">
@@ -122,13 +128,13 @@ export default function Pricing() {
                                 ))}
                             </ul>
 
-                            <Link
-                                to={plan.name === "Enterprise" ? "/enterprise" : "/"}
+                            <button
                                 className={`plan-cta ${plan.ctaVariant}`}
+                                onClick={() => handlePlanClick(plan.name)}
                             >
                                 {plan.cta}
                                 <ArrowRight className="cta-icon" />
-                            </Link>
+                            </button>
                         </div>
                     ))}
                 </div>
@@ -170,6 +176,73 @@ export default function Pricing() {
                     </div>
                 </div>
             </section>
+
+            {/* Payment Modal */}
+            {showPayment && (
+                <div className="payment-overlay" onClick={() => setShowPayment(false)}>
+                    <div className="payment-modal" onClick={(e) => e.stopPropagation()}>
+                        {/* Coming Soon Banner */}
+                        <div className="coming-soon-banner">
+                            <span>🚀 Coming Soon</span>
+                        </div>
+
+                        {/* Close button */}
+                        <button className="modal-close" onClick={() => setShowPayment(false)}>
+                            <X size={18} />
+                        </button>
+
+                        {/* Modal Header */}
+                        <div className="modal-header">
+                            <div className="modal-icon">
+                                <CreditCard size={22} />
+                            </div>
+                            <h3>Payment Details</h3>
+                            <p>Subscribe to {selectedPlan} plan</p>
+                        </div>
+
+                        {/* Card Form (visual only) */}
+                        <div className="payment-form">
+                            <div className="form-group">
+                                <label>Card Number</label>
+                                <div className="input-wrapper">
+                                    <CreditCard size={16} className="input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="1234  5678  9012  3456"
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" placeholder="MM / YY" disabled />
+                                </div>
+                                <div className="form-group">
+                                    <label>CVC</label>
+                                    <input type="text" placeholder="123" disabled />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Cardholder Name</label>
+                                <input type="text" placeholder="John Doe" disabled />
+                            </div>
+
+                            <button className="pay-btn" disabled>
+                                <Lock size={14} />
+                                Pay Now
+                            </button>
+
+                            <p className="secure-text">
+                                <Lock size={12} />
+                                Payments are secured with 256-bit encryption
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
