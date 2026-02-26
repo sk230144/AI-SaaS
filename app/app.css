@@ -328,6 +328,23 @@
           .share {
             @apply bg-black text-white h-9 shadow-sm hover:bg-zinc-800;
           }
+
+          .share-wrapper {
+            @apply relative;
+
+            .share-dropdown {
+              @apply absolute right-0 top-full mt-2 bg-white rounded-xl border border-zinc-200 shadow-xl overflow-hidden z-50 min-w-48;
+              animation: slideUp 0.2s ease;
+
+              .share-option {
+                @apply w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors cursor-pointer border-b border-zinc-100 last:border-b-0;
+
+                svg {
+                  @apply shrink-0;
+                }
+              }
+            }
+          }
         }
       }
 
