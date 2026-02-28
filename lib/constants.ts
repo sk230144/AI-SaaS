@@ -1,5 +1,90 @@
 export const PUTER_WORKER_URL = import.meta.env.VITE_PUTER_WORKER_URL || "";
 
+// ─── V2 Edit Feature Types ────────────────────────────────────────────────────
+
+export type FurnitureObject =
+    | 'bed' | 'sofa' | 'dining table' | 'desk' | 'wardrobe'
+    | 'coffee table' | 'tv unit' | 'bookshelf' | 'kitchen counter'
+    | 'bathtub' | 'toilet' | 'sink';
+
+export type FurnitureStyle = 'Modern' | 'Minimal' | 'Luxury' | 'Classic';
+
+export type RoomStyle = 'Modern' | 'Scandinavian' | 'Luxury' | 'Minimal' | 'Contemporary';
+
+export type EditMode = 'move' | 'replace' | 'remove' | 'style' | null;
+
+// ─── Edit Prompt Builders ─────────────────────────────────────────────────────
+
+export const buildMovePrompt = (object: FurnitureObject): string => `
+You are an expert architectural visualization engine editing an existing photorealistic 3D top-down floor plan render.
+
+TASK: Reposition the ${object} within the same room to a more optimal location.
+
+STRICT RULES:
+1. DO NOT move or change any walls, doors, windows, or structural elements.
+2. DO NOT change any other furniture items in other rooms.
+3. The ${object} must remain inside the same room boundary — no overlapping with walls.
+4. Maintain all proportions, materials, lighting, and rendering style exactly as in the input image.
+5. The repositioned ${object} must not clip or overlap other furniture items.
+6. Keep top-down orthographic view. No perspective tilt.
+7. Output must be indistinguishable in quality from the input render.
+`.trim();
+
+export const buildReplacePrompt = (object: FurnitureObject, style: FurnitureStyle): string => `
+You are an expert architectural visualization engine editing an existing photorealistic 3D top-down floor plan render.
+
+TASK: Replace the existing ${object} with a ${style}-style ${object}.
+
+STYLE DEFINITIONS:
+- Modern: Clean lines, neutral tones, minimal ornamentation, contemporary materials.
+- Minimal: Ultra-simple form, monochrome palette, no decoration, pure function.
+- Luxury: Rich materials (velvet, leather, brass, marble), ornate details, premium finish.
+- Classic: Traditional shapes, warm wood tones, timeless silhouettes, subtle patterns.
+
+STRICT RULES:
+1. Only change the ${object} — do not alter walls, floors, doors, windows, or any other furniture.
+2. Keep the replacement ${object} in the exact same position and at the same scale as the original.
+3. Maintain all lighting, shadows, and rendering quality exactly.
+4. Keep top-down orthographic view. No perspective tilt.
+5. The new ${object} must fit naturally within the room without clipping walls or other objects.
+`.trim();
+
+export const buildRemovePrompt = (object: FurnitureObject): string => `
+You are an expert architectural visualization engine editing an existing photorealistic 3D top-down floor plan render.
+
+TASK: Remove the ${object} from the scene and reveal the natural floor surface underneath it.
+
+STRICT RULES:
+1. Remove ONLY the ${object}. Do not touch any walls, doors, windows, or other furniture.
+2. Fill the area where the ${object} was with the correct floor material (match surrounding floor exactly — same texture, grain direction, tile pattern, and color).
+3. The floor infill must be seamless and indistinguishable from the surrounding floor.
+4. Maintain all lighting, ambient occlusion, and shadow consistency after removal.
+5. Keep top-down orthographic view. No perspective tilt.
+6. Output quality must be identical to the input render.
+`.trim();
+
+export const buildStyleSwitchPrompt = (style: RoomStyle): string => `
+You are an expert architectural visualization engine editing an existing photorealistic 3D top-down floor plan render.
+
+TASK: Re-render the entire interior scene in ${style} style.
+
+STYLE DEFINITIONS:
+- Modern: Clean geometry, neutral palette (white/gray/beige), sleek materials, minimal decor.
+- Scandinavian: Light oak wood, white walls, soft textiles, hygge warmth, functional simplicity.
+- Luxury: Rich marble, brass/gold accents, velvet upholstery, crystal/glass elements, opulent details.
+- Minimal: Near-empty spaces, monochrome palette, only essential furniture, maximum negative space.
+- Contemporary: Current trends, mixed materials, bold accent colors, artistic touches, dynamic forms.
+
+STRICT RULES:
+1. DO NOT change wall layout, room boundaries, door positions, or window positions.
+2. DO NOT resize or relocate any rooms.
+3. ONLY change: furniture styles, floor materials, wall paint/texture, fabric colors, and decorative details.
+4. All furniture must remain in the same positions — only their visual style changes.
+5. Keep top-down orthographic view at exactly 90°. No perspective tilt.
+6. Output must be photorealistic and match professional architectural visualization quality.
+7. Remove all text, labels, watermarks from output.
+`.trim();
+
 // Storage Paths
 export const STORAGE_PATHS = {
     ROOT: "roomify",
